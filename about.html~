@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by TEMPLATED
+http://templated.co
+Released for free under the Creative Commons Attribution License
+
+Name       : GrassyGreen 
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20140310
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>About Me</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link href="http://fonts.googleapis.com/css?family=Raleway:400,200,500,600,700,800,300" rel="stylesheet" />
+<link href="default.css" rel="stylesheet" type="text/css" media="all" />
+<link href="fonts.css" rel="stylesheet" type="text/css" media="all" />
+<!--[if IE 6]>
+<link href="default_ie6.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+</head>
+<body>
+<div id="wrapper">
+	<div id="menu-wrapper">
+		<div id="menu" class="container">
+			<ul>
+				<li><a href="http://danieladamspencer.github.io/index.html">Homepage</a></li>
+				<li class="current_page_item"><a href="#">About</a></li>
+				<li><a href="http://people.ucsc.edu/~daspence">UCSC Page</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+		</div>
+		<!-- end #menu --> 
+	<div id="header-wrapper">
+		<div id="header" class="container">
+			<div id="logo">
+				<h1><a href="#">About Me</a></h1>
+				<p>Because it's easier to read than to ask and hear me ramble</p>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div id="banner"></div>
+	<div id="page" class="container">
+		<div id="content">
+			<!--<div class="title">
+				<h2>First Post!</h2>
+				<span class="byline">I have no idea what I'm doing...</span> </div> -->
+			<p>I grew up in Royersford, PA, a suburb of Philadelphia. I liked it there, as I had everything a kid could want: relative freedom, supportive (but divorced) parents, a perfectly adequate number of friends and acquaintances. I graduated from Spring-Ford Senior High School in 2006, bound for Penn State. In my first year, I found myself split between enjoying the college life and staying connected with my girlfriend.</p>
+			<p>The following year, I really got to know my wife, Lisa. She and I had met the year before - on our first day at PSU, but we weren't super close. We joined the Nittany Grotto - a caving club, and spiraled into each other's lives. In 2009, we became engaged in Big Basin Redwoods State Park in California. We got married in 2010 right before I graduated from Penn State (Lisa graduated a few months later).</p>
+			<p>Since then, we have had a number of adventures. We lived for a year in State College, PA, then moved to Santa Cruz, CA for three months before joining the Peace Corps in Mozambique in September 2011. We were teachers in the secondary school in Z&oacute;bu&egrave;, an experience that has been extremely well-documented in Lisa's <a href="http://lisajospencer.blogspot.com/">blog</a>. We returned in December 2013.</p>
+			<p>While we were vacationing in South Africa after closing our Peace Corps service, we found out that Lisa was pregnant. The following months were spent anxiously awaiting the birth of our daughter, Lua. </p>
+		</div>
+		<div id="sidebar">
+			<div class="box2">
+				<div class="title">
+					<h2>Integer gravida</h2>
+				</div>
+				<ul class="style2">
+					<li><a href="#">Amet turpis, feugiat et sit amet</a></li>
+					<li><a href="#">Ornare in hendrerit in lectus</a></li>
+					<li><a href="#">Semper mod quis eget mi dolore</a></li>
+					<li><a href="#">Quam turpis feugiat sit dolor</a></li>
+					<li><a href="#">Amet ornare in hendrerit in lectus</a></li>
+					<li><a href="#">Quam turpis feugiat sit dolor</a></li>
+					<li><a href="#">Consequat etiam lorem phasellus</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+<div id="footer-wrapper">
+	<div id="footer" class="container">
+		<div id="box1">
+			<div class="title">
+				<h2>Latest Post</h2>
+			</div>
+			<ul class="style1">
+				<li><a href="#">Semper mod quis eget mi dolore</a></li>
+				<li><a href="#">Quam turpis feugiat sit dolor</a></li>
+				<li><a href="#">Amet ornare in hendrerit in lectus</a></li>
+				<li><a href="#">Consequat etiam lorem phasellus</a></li>
+				<li><a href="#">Amet turpis, feugiat et sit amet</a></li>
+				<li><a href="#">Semper mod quisturpis nisi</a></li>
+			</ul>
+		</div>
+		<div id="box2">
+			<div class="title">
+				<h2>Popular Links</h2>
+			</div>
+			<ul class="style1">
+				<li><a href="#">Semper mod quis eget mi dolore</a></li>
+				<li><a href="#">Quam turpis feugiat sit dolor</a></li>
+				<li><a href="#">Amet ornare in hendrerit in lectus</a></li>
+				<li><a href="#">Consequat etiam lorem phasellus</a></li>
+				<li><a href="#">Amet turpis, feugiat et sit amet</a></li>
+				<li><a href="#">Semper mod quisturpis nisi</a></li>
+			</ul>
+		</div>
+		<div id="box3">
+			<div class="title">
+				<h2>Follow Us</h2>
+			</div>
+			<p>Proin eu wisi suscipit nulla suscipit interdum. Aenean lectus lorem, imperdiet magna.</p>
+			<ul class="contact">
+				<li><a href="#" class="icon icon-twitter"><span>Twitter</span></a></li>
+				<li><a href="#" class="icon icon-facebook"><span>Facebook</span></a></li>
+				<li><a href="#" class="icon icon-dribbble"><span>Dribbble</span></a></li>
+				<li><a href="#" class="icon icon-tumblr"><span>Tumblr</span></a></li>
+				<li><a href="#" class="icon icon-rss"><span>Pinterest</span></a></li>
+			</ul>
+				<a href="#" class="button">Read More</a> </div>
+		</div>
+	</div>
+</div>
+<div id="copyright" class="container">
+	<p>&copy; Untitled. All rights reserved. | Photos by <a href="http://fotogrph.com/">Fotogrph</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
+</div>
+</body>
+</html>
