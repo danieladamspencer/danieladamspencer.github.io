@@ -50,10 +50,16 @@ Released   : 20140310
 			<!--<div class="title">
 				<h2>First Post!</h2>
 				<span class="byline">I have no idea what I'm doing...</span> </div> -->
-			<p>I grew up in Royersford, PA, a suburb of Philadelphia. I liked it there, as I had everything a kid could want: relative freedom, supportive (but divorced) parents, a perfectly adequate number of friends and acquaintances. I graduated from Spring-Ford Senior High School in 2006, bound for Penn State. In my first year, I found myself split between enjoying the college life and staying connected with my girlfriend.</p>
+			<!--<p>I grew up in Royersford, PA, a suburb of Philadelphia. I liked it there, as I had everything a kid could want: relative freedom, supportive (but divorced) parents, a perfectly adequate number of friends and acquaintances. I graduated from Spring-Ford Senior High School in 2006, bound for Penn State. In my first year, I found myself split between enjoying the college life and staying connected with my girlfriend.</p>
 			<p>The following year, I really got to know my wife, Lisa. She and I had met the year before - on our first day at PSU, but we weren't super close. We joined the Nittany Grotto - a caving club, and spiraled into each other's lives. In 2009, we became engaged in Big Basin Redwoods State Park in California. We got married in 2010 right before I graduated from Penn State (Lisa graduated a few months later).</p>
 			<p>Since then, we have had a number of adventures. We lived for a year in State College, PA, then moved to Santa Cruz, CA for three months before joining the Peace Corps in Mozambique in September 2011. We were teachers in the secondary school in Z&oacute;bu&egrave;, an experience that has been extremely well-documented in Lisa's <a href="http://lisajospencer.blogspot.com/">blog</a>. We returned in December 2013.</p>
-			<p>While we were vacationing in South Africa after closing our Peace Corps service, we found out that Lisa was pregnant. The following months were spent anxiously awaiting the birth of our daughter, Lua. </p>
+			<p>While we were vacationing in South Africa after closing our Peace Corps service, we found out that Lisa was pregnant. The following months were spent anxiously awaiting the birth of our daughter, Lua. </p>-->
+			<ul>
+				<li><strong>1988 - 2006: Royerford, PA</strong></li>: Made it to adulthood</li>
+				<li><strong>2006 - 2011: State College, PA</strong>: Met Lisa, finished BS and MAS, taught Stat 200 for a year</li>
+				<li><strong>2011 - 2013: Z&oacute;bu&egrave;, Tete, Mo&ccedil;ambique</strong>: Peace Corps Education Volunteer</li>
+				<li><strong>2013 - 2014: Mountain Top, PA</strong>: Penn State World Campus Instructor, Lua born</li>
+				<li><strong>2014 - Present: Santa Cruz, CA</strong>: PhD Student, Ira born</li>
 		</div>
 		<div id="sidebar">
 			<div class="box2">
@@ -120,7 +126,7 @@ Released   : 20140310
 	</div>
 </div>
 <div id="copyright" class="container">
-	<p>&copy; Untitled. All rights reserved. | Photos by <a href="http://fotogrph.com/">Fotogrph</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
+	<p>&copy; 2016. All rights reserved. | Photos by <a href="https://www.facebook.com/lisajophotography/?fref=ts">Lisa Jo Photography</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
 </div>
 </body>
 </html>
