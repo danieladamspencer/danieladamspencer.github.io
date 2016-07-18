@@ -1,16 +1,16 @@
 /* TEAM */
                             
-Your title: Your name.                        
-Site: email, link to a contact form, etc.                         
+Your title: Dan Spencer                        
+Site: danieladamspencer.github.io                         
 Twitter: your Twitter username.                        
-Location: City, Country.
+Location: Santa Cruz, CA
 
 
 /* THANKS */
 
 HTML5 Muffin
 This is a Frappuccino Blog
-Name: name or url
+Name: danieladamspencer
 
                             
 /* SITE */
