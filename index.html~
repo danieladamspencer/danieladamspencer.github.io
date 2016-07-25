@@ -9,7 +9,7 @@ title: Home
     	<div class="row-fluid">
     		<section class="content">
     		  <h1>Numbers Guy</h1>
-		  <div class="sub-title">I firmly believe that numbers should be making the decisions</div>
+		  <div class="sub-title">Let the numbers make the decisions</div>
     		</section>
     		<ul class="entries">
     		{% for post in paginator.posts %}
