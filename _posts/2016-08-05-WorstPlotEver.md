@@ -15,4 +15,4 @@ Anyway, it's not that hard to throw together a decent-looking, accurate plot. Is
 
 ![]({{ site.url }}/img/OlympicMedals.jpg)
 
-*code on [GitHub]({{ site.url }}/Code/)*
+*code on [GitHub](http://github.com/danieladamspencer/danieladamspencer.github.io/tree/master/Code)*
