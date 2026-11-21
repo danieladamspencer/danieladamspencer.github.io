@@ -76,7 +76,7 @@ h3 { font-size: 1.1rem; margin: 1.5rem 0 .25rem; }
 
 /* ---------- home ---------- */
 .intro { display: flex; gap: 1.75rem; align-items: center; margin-top: 2.5rem; }
-.intro img { width: 132px; height: 132px; object-fit: cover; object-position: 50% 30%; border-radius: 50%; flex: none; }
+.intro img { width: 132px; height: 132px; object-fit: cover; object-position: center; border-radius: 50%; flex: none; }
 .intro h1 { margin: 0 0 .25rem; }
 .tagline { margin: 0; color: var(--muted); font-size: 1.05rem; }
 .links { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin: .75rem 0 0; padding: 0; list-style: none; font-size: .95rem; }
