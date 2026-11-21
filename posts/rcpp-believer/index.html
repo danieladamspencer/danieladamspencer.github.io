@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I'm an Rcpp Believer · Dan Spencer</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="icon" href="/assets/favicon.png">
+</head>
+<body>
+  <header class="site-header"><nav>
+    <a class="brand" href="/">Dan Spencer</a>
+    <span class="nav-links"><a href="/cv/">CV</a><a href="/posts/" aria-current="page">Writing</a></span>
+  </nav></header>
+  <main>
+    <article class="post">
+      <p class="post-meta"><a href="/posts/">← Writing</a> · <time datetime="2018-03-15">March 15, 2018</time></p>
+      <h1>I'm an Rcpp Believer</h1>
+<p>I didn't know.</p>
+<p>I needed to draw from the multivariate normal distribution in R. I did what anyone in that situation would: I searched for an existing package that already had the functionality.</p>
+<p>I heard snippets here and there from other graduate students. "R is inefficient." "Memory allocation is expensive." "You should just use C++." I didn't listen.</p>
+<p>My MCMC sampler required me to make dozens of draws from the multivariate normal distribution. It was slow, but I suffered in silence. Better that than learn a new language, I told myself. The time that would take is much more than the time to just sit while the sampler ran.</p>
+<p>Finally, while waiting days for a batch of tests to run, I peeked. I took a look at Hadley's chapter in <a href="http://adv-r.had.co.nz/Rcpp.html">Advanced R</a> about <em>Rcpp</em>. It took a few days to figure out, days when my MCMC sampler continued to run. I couldn't believe the results.</p>
+<p>I was a fool. I was able to code portions of my MCMC in C++ easily using Rcpp Sugar. My sampling from the multivariate normal distribution became more efficient by a factor of 10. Life is better now. More vibrant. I can only hope to convince others in my position that the learning curve is not too steep, and that the payoff is worth it.</p>
+<h2>C++ Code</h2>
+<pre><code class="language-cpp">#include &lt;RcppArmadillo.h&gt;
+// [[Rcpp::depends(RcppArmadillo)]]
+// Sample N x P observations from a Standard
+// Multivariate Normal given N observations, a
+// vector of P means, and a P x P covmatrix
+// [[Rcpp::export]]
+arma::mat rmvnorm(int n,
+                  const arma::vec&amp; mu,
+                  const arma::mat&amp; Sigma) {
+  unsigned int p = Sigma.n_cols;
+  // First draw N x P values from a N(0,1)
+  Rcpp::NumericVector draw = Rcpp::rnorm(n*p);
+  // Instantiate an Armadillo matrix with the
+  // drawn values using advanced constructor
+  // to reuse allocated memory
+  arma::mat Z = arma::mat(draw.begin(), n, p,
+                          false, true);
+  // Simpler, less performant alternative
+  // arma::mat Z = Rcpp::as&lt;arma::mat&gt;(draw);
+  // Generate a sample from the Transformed
+  // Multivariate Normal
+  arma::mat Y = arma::repmat(mu, 1, n).t() +
+    Z * arma::chol(Sigma);
+  return Y; }</code></pre>
+<h2>R Code</h2>
+<pre><code class="language-r">my_rmvnorm &lt;- function(n,mu,sigma){
+  p = ncol(sigma) 
+  draw = rnorm(n*p) 
+  z = matrix(draw,n,p) 
+  y = (matrix(rep(mu,n),n)) + z %*% chol(sigma) 
+  return(y)}
+
+print(summary(microbenchmark(C = rmvnorm(1,a_mean,a_cov),
+  R = my_rmvnorm(1,a_mean,a_cov),
+  mvtnorm = mvtnorm::rmvnorm(1,a_mean,a_cov))))</code></pre>
+<h2>Results</h2>
+<p><img src="mvnorm_speed.png" alt="" loading="lazy"></p>
+    </article>
+  </main>
+  <footer class="site-footer"><p>© Dan Spencer · <a href="/">dancmdstat.com</a></p></footer>
+</body>
+</html>

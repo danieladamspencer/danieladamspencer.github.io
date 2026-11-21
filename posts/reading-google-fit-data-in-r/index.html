@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reading Google Fit Data in R · Dan Spencer</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="icon" href="/assets/favicon.png">
+</head>
+<body>
+  <header class="site-header"><nav>
+    <a class="brand" href="/">Dan Spencer</a>
+    <span class="nav-links"><a href="/cv/">CV</a><a href="/posts/" aria-current="page">Writing</a></span>
+  </nav></header>
+  <main>
+    <article class="post">
+      <p class="post-meta"><a href="/posts/">← Writing</a> · <time datetime="2017-08-05">August 5, 2017</time></p>
+      <h1>Reading Google Fit Data in R</h1>
+<h3>1. Grab your data from Google Takeout</h3>
+<p>Head over <a href="https://takeout.google.com/settings/takeout">here</a> and grab your Fit data. If you want to look at/grab data from individual runs, you might only want to select "Activity Data" specifically, and leave the daily aggregations out of it.</p>
+<h3>2. Download GPSBabel</h3>
+<p>The <a href="https://www.gpsbabel.org/">GPSBabel</a> website offers downloads of its program, as well as pretty decent support documents for a volunteer-supported project.</p>
+<p>I did my work on a Windows 10 machine. If you are using Windows, you will need to add the folder you installed GPSBabel into to your path environment. <a href="https://stackoverflow.com/questions/9546324/adding-directory-to-path-environment-variable-in-windows">Stack Overflow</a> has some good methods for doing this.</p>
+<h3>3. Read each of the TCX files into R</h3>
+<p>Since each activity has its information saved in a separate file, you will probably want to read in the data efficiently. I did something like this:</p>
+<pre><code class="language-r">library(tidyverse)
+library(maptools)
+folder &lt;- "C:/Users/Me/Containing_folder/"
+tcx_files &lt;- grep("Running.tcx",list.files(folder),value = T) %&gt;% 
+  .[-grep("Walking",.)] # I'm only interested in running activities
+raw_read &lt;- sapply(tcx_files,function(z){
+  tryCatch(readGPS(i='gtrnctr',f=paste0(folder,z),type='t'),error = function(e) NULL)
+},simplify = F) # There may be empty activity files. This keeps R from halting the read
+nulls &lt;- sapply(raw_read,is.null) 
+raw_read &lt;- raw_read[!nulls] # This takes out the empty activites
+raw_read &lt;- sapply(raw_read,function(z){ # This next bit takes care of an issue where lap identification 
+  col_shift &lt;- grep("LAP",z[,2])         # shifts the columns of the first few rows of the data frame
+  z[col_shift,1:24] &lt;- z[col_shift,3:26]
+  z
+},simplify = F)
+info_columns &lt;- c(3,4,13,16) # Latitude, Longitude, elevation (feet), time (seconds since midnight 1970-01-01 in UTC)
+google_runs &lt;- sapply(raw_read,function(z) {
+  keep &lt;- z[,info_columns] # Grabs the columns with the wanted information
+  names(keep) &lt;- c("lat","lon","ele","time") # Names the columns
+  keep$ele &lt;- gsub("F","",keep$ele) # Trims the "F" label off of the elevation data
+  keep[,sapply(keep,class)=="factor"] &lt;- sapply(keep[,sapply(keep,class)=="factor"],function(ff){
+    as.numeric(as.character(ff))
+  }) # As all variables should be numeric, this makes them that way
+  keep$time &lt;- as.POSIXct(as.numeric(as.character(keep$time)),origin="1970-01-01",tz="UTC")
+  filter(keep,ele &gt;= 0) # This is here in order to get rid of some problem data showing negative elevation
+},simplify = F)
+no_data &lt;- sapply(google_runs,function(gr){dim(gr)[1]}) == 0 
+google_runs &lt;- google_runs[!no_data] # Remove any empty activity sets</code></pre>
+<h3>4. Keep cleaning the data</h3>
+<p>The data is in R now, but it's far from clean. Depending on the phone used, the GPS may have decided that you plunged into the core of the Earth for a few seconds every once in a while. Or it might think you teleported into the next county for a span of ten seconds. Both of these happened in my data set.</p>
+    </article>
+  </main>
+  <footer class="site-footer"><p>© Dan Spencer · <a href="/">dancmdstat.com</a></p></footer>
+</body>
+</html>

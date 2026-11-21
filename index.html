@@ -1,75 +1,68 @@
----
-layout: default
-title: Home
----
-<!-- Content
-    ================================================== -->
-  <div class="content">
-    <main class="container">
-    	<div class="row-fluid">
-    		<section class="content">
-    		  <h1>Dan Spencer</h1>
-		  <!-- <div class="sub-title"></div> -->
-    		</section>
-    		<ul class="entries">
-    		{% for post in paginator.posts %}
-    		  <li>
-    		    <a href="{{ post.url }}">
-    		        <h3>{{ post.title }}</h3>
-                <time>{{ post.date | date: "%d %B %Y" }}</time>
-                <div>{{ post.content |truncatehtml | truncatewords: 30 }}</div>
-    		    </a>
-    		  </li>
-    		{% endfor %}
-    		</ul>
-    	</div>
-      
-      <div id="post-pagination">
-        {% if paginator.previous_page %}
-        <p class="prev">
-          {% if paginator.previous_page == 1 %}
-          <a href="/">Previous</a>
-          {% else %}
-          <a href="/page{{paginator.previous_page}}"> Previous</a>
-          {% endif %}
-        </p>
-        {% else %}
-<!--         <p class="prev disabled">
-          <span>Previous</span>
-        </p> -->
-        {% endif %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dan Spencer</title>
+  <meta name="description" content="Dan Spencer, statistician: Bayesian methods, climate and catastrophe risk, neuroimaging, and R.">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="icon" href="/assets/favicon.png">
+</head>
+<body>
+  <header class="site-header"><nav>
+    <a class="brand" href="/">Dan Spencer</a>
+    <span class="nav-links"><a href="/cv/">CV</a><a href="/posts/">Writing</a></span>
+  </nav></header>
 
-        <ul class="pages">
-          <li class="page">
-            {% if paginator.page == 1 %}
-<!--             <span class="current-page">1</span> -->
-            {% else %}
-<!--             <a href="/">1</a> -->
-            {% endif %}
-          </li>
-
-          {% for count in (2..paginator.total_pages) %}
-          <li class="page">
-            {% if count == paginator.page %}
-            <span class="current-page">{{count}}</span>
-            {% else %}
-            <a href="/page{{count}}">{{count}}</a>
-            {% endif %}
-          </li>
-          {% endfor %}
+  <main>
+    <section class="intro">
+      <img src="/assets/avatar.png" alt="Portrait of Dan Spencer">
+      <div>
+        <h1>Dan Spencer</h1>
+        <p class="tagline">Statistician in Boston. Bayesian methods, climate risk, neuroimaging, and R.</p>
+        <ul class="links">
+          <li><a href="mailto:danieladamspencer@gmail.com">Email</a></li>
+          <li><a href="https://github.com/danieladamspencer">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/dancmdstat">LinkedIn</a></li>
+          <li><a href="/cv/">CV</a></li>
         </ul>
-
-        {% if paginator.next_page %}
-        <p class="next">
-          <a href="/page{{paginator.next_page}}">Next</a>
-        </p>
-        {% else %}
-<!--         <p class="next disabled">
-          <span>Next</span>
-        </p> -->
-        {% endif %}
       </div>
+    </section>
 
-    </main>
-  </div>
+    <h2>About</h2>
+    <p class="lede">I'm a scientist at <strong>Verisk</strong>, where I build and validate statistical models
+      of tropical cyclones and lend a hand with the risk from other atmospheric perils, like winter storms
+      and severe thunderstorms.</p>
+    <p>Before that I was a research associate at Indiana University, developing Bayesian methods and
+      open-source R software for analyzing fMRI data on the cortical surface. I earned my PhD in
+      Statistical Science at UC Santa Cruz, where my dissertation on Bayesian tensor regression was a finalist
+      for ISBA's Savage Award. Long before any of that, I taught high-school math in Portuguese as a
+      Peace Corps volunteer in Zóbuè, Mozambique.</p>
 
+    <h2>Interests</h2>
+    <ul class="interests">
+      <li><strong>Bayesian modeling</strong><span>Hierarchical models, MCMC, and honest uncertainty quantification.</span></li>
+      <li><strong>Climate &amp; catastrophe risk</strong><span>Simulating tropical cyclones and other perils over thousands of years.</span></li>
+      <li><strong>Neuroimaging</strong><span>Spatial models for task fMRI and tensor methods for brain data.</span></li>
+      <li><strong>Statistical software</strong><span>R packages, Rcpp and C++, and fast, reproducible analysis.</span></li>
+      <li><strong>Data visualization</strong><span>Clear, accurate plots. I taught a graduate course on it.</span></li>
+      <li><strong>Teaching</strong><span>From Mozambique to Penn State and UC Santa Cruz classrooms.</span></li>
+    </ul>
+
+    <h2 id="software">Software</h2>
+    <ul class="plain">
+      <li><a href="https://github.com/mandymejia/BayesfMRI">BayesfMRI</a> <span class="muted">· surface-based spatial Bayesian models for task fMRI (contributor)</span></li>
+      <li><a href="https://github.com/danieladamspencer/bayestensorreg">bayestensorreg</a> <span class="muted">· Bayesian tensor regression using tensor decompositions</span></li>
+      <li><a href="https://github.com/danieladamspencer/brainSim">brainSim</a> <span class="muted">· simulating CIFTI brain data</span></li>
+    </ul>
+
+    <h2>Writing</h2>
+    <p>A few posts on statistics and R, most recently
+      <a href="/posts/bayesian-covid-probability/">Bayesian COVID Probability</a> and
+      <a href="/posts/estimating-negative-variance/">Estimating Negative Variance</a>.
+      <a href="/posts/">All posts →</a></p>
+  </main>
+
+  <footer class="site-footer"><p>© Dan Spencer · Plain HTML, hosted on GitHub Pages</p></footer>
+</body>
+</html>
