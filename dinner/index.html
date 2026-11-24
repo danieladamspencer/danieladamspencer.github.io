@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dinner · Dan Spencer</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Pick a night for dinner with Dan and Lisa.">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="icon" href="/assets/favicon.png">
+</head>
+
+<body>
+  <header class="site-header">
+    <nav>
+      <a class="brand" href="/">Dan Spencer</a>
+      <span class="nav-links"><a href="/cv/">CV</a><a href="/posts/">Writing</a></span>
+    </nav>
+  </header>
+
+  <main class="dinner">
+    <h1>Dinner with Dan &amp; Lisa</h1>
+    <p class="lede">Pick a night to come over to our place, or to have us over at yours. We'll get a
+      note and email you back to confirm.</p>
+
+    <p id="demo-note" class="dinner-banner" hidden>Demo mode: made-up nights, nothing is sent. The password is
+      <code>demo</code>.</p>
+    <p id="setup-note" class="dinner-banner" hidden>Booking isn't switched on yet. Check back soon.</p>
+
+    <form id="login" class="dinner-login" hidden>
+      <label for="pw">Password</label>
+      <div class="dinner-login-row">
+        <input id="pw" type="password" autocomplete="current-password" required>
+        <button type="submit">Show nights</button>
+      </div>
+      <label class="dinner-check"><input id="remember" type="checkbox" checked> Remember on this device</label>
+      <p id="login-msg" class="dinner-msg" role="alert"></p>
+    </form>
+
+    <section id="cal" hidden>
+      <ul class="dinner-legend" aria-label="Legend">
+        <li><span class="swatch free"></span>Available</li>
+        <li><span class="swatch busy"></span>Busy</li>
+        <li><span class="swatch requested"></span>Already requested</li>
+      </ul>
+      <p class="muted dinner-hint">Tap a blue night to ask for it. Times are evenings in Boston.</p>
+      <div id="months"></div>
+      <p class="muted dinner-hint"><button type="button" id="logout" class="linklike">Forget password on this
+          device</button></p>
+    </section>
+    <p id="cal-msg" class="dinner-msg" role="alert"></p>
+  </main>
+
+  <dialog id="ask" class="dinner-dialog" aria-labelledby="ask-title">
+    <form id="ask-form" method="dialog">
+      <h2 id="ask-title">Request <span id="ask-date"></span></h2>
+      <label for="f-name">Your name</label>
+      <input id="f-name" name="name" maxlength="80" autocomplete="name" required>
+      <label for="f-email">Your email <span class="muted">(we reply here)</span></label>
+      <input id="f-email" name="email" type="email" maxlength="120" autocomplete="email" required>
+      <fieldset>
+        <legend>What would you like to do?</legend>
+        <label class="dinner-choice"><input type="radio" name="kind" value="host" required> Come over to our
+          place</label>
+        <label class="dinner-choice"><input type="radio" name="kind" value="visit"> Have us over at yours</label>
+      </fieldset>
+      <label for="f-note">Anything else? <span class="muted">(optional)</span></label>
+      <textarea id="f-note" name="note" rows="3" maxlength="600"
+        placeholder="Who's coming, a time that suits, food allergies…"></textarea>
+      <p id="ask-msg" class="dinner-msg" role="alert"></p>
+      <div class="dinner-actions">
+        <button type="button" id="ask-cancel" class="secondary">Cancel</button>
+        <button type="submit" id="ask-send">Send request</button>
+      </div>
+    </form>
+    <div id="ask-done" hidden>
+      <h2>Request sent</h2>
+      <p>Thanks! We'll email you to confirm <span id="done-date"></span>.</p>
+      <div class="dinner-actions"><button type="button" id="done-close">Close</button></div>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <p>© Dan Spencer · Plain HTML, hosted on GitHub Pages</p>
+  </footer>
+
+  <script>
+    // The Apps Script web app URL (ends in /exec). See dinner/README.md.
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycby032JoJMRJZ1pAnrShhvrH5aLODiFWUG0GBVzC6EGZRtWl_0h59V7TKun0TVJjqWT-/exec';
+
+    const DEMO = new URLSearchParams(location.search).has('demo');
+    const $ = (id) => document.getElementById(id);
+    const store = {
+      get(k) { try { return localStorage.getItem(k) || sessionStorage.getItem(k); } catch (e) { return null; } },
+      set(k, v, keep) { try { (keep ? localStorage : sessionStorage).setItem(k, v); } catch (e) { } },
+      del(k) { try { localStorage.removeItem(k); sessionStorage.removeItem(k); } catch (e) { } },
+    };
+    const ERRORS = {
+      bad_password: "That password didn't work.",
+      not_free: 'Sorry, that night just got booked. Please pick another.',
+      already_requested: 'Someone has already asked for that night. Please pick another.',
+      too_many: 'We have a lot of requests waiting right now. Please try again in a few days.',
+      bad_email: 'Please check your email address.',
+      missing_name: 'Please add your name.',
+      bad_date: 'That night is outside the booking window.',
+      server_error: 'Something went wrong on our end. Please try again, or just email Dan.',
+      network: "Couldn't reach the booking service. Check your connection and try again.",
+    };
+    const errText = (code) => ERRORS[code] || ERRORS.server_error;
+
+    const PW_KEY = DEMO ? 'dinner_demo_pw' : 'dinner_pw';
+    let password = store.get(PW_KEY);
+    let nights = {};     // 'yyyy-MM-dd' -> 'free' | 'busy' | 'requested'
+    let picked = null;
+
+    async function call(body) {
+      if (DEMO) return demoCall(Object.assign({ password }, body));
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          // text/plain keeps this a "simple" request, so no CORS preflight (Apps Script can't answer one)
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(Object.assign({ password }, body)),
+        });
+        return await res.json();
+      } catch (e) {
+        return { ok: false, error: 'network' };
+      }
+    }
+
+    async function load() {
+      $('cal-msg').textContent = 'Loading nights…';
+      const r = await call({ action: 'availability' });
+      $('cal-msg').textContent = '';
+      if (!r.ok) {
+        if (r.error === 'bad_password') return showLogin(errText('bad_password'));
+        $('cal-msg').textContent = errText(r.error);
+        return;
+      }
+      nights = {};
+      r.nights.forEach((n) => { nights[n.date] = n.status; });
+      $('login').hidden = true;
+      $('cal').hidden = false;
+      render();
+    }
+
+    function showLogin(msg) {
+      store.del(PW_KEY);
+      password = null;
+      $('cal').hidden = true;
+      $('login').hidden = false;
+      $('login-msg').textContent = msg || '';
+      $('pw').focus();
+    }
+
+    // ---- calendar rendering ----
+    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const STATUS_WORD = { free: 'available', busy: 'busy', requested: 'already requested' };
+    const ymd = (y, m, d) => `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    function longDate(date) {
+      const [y, m, d] = date.split('-').map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+
+    function render() {
+      const dates = Object.keys(nights).sort();
+      const box = $('months');
+      box.replaceChildren();
+      if (!dates.length) return;
+      let [y, m] = dates[0].split('-').map(Number);
+      const [ly, lm] = dates[dates.length - 1].split('-').map(Number);
+      while (y < ly || (y === ly && m <= lm)) {
+        const sec = document.createElement('section');
+        sec.className = 'dinner-month';
+        const h = document.createElement('h2');
+        h.textContent = `${MONTHS[m - 1]} ${y}`;
+        const grid = document.createElement('div');
+        grid.className = 'dinner-grid';
+        grid.setAttribute('role', 'group');
+        grid.setAttribute('aria-label', h.textContent);
+        DOW.forEach((d) => {
+          const c = document.createElement('div');
+          c.className = 'dow'; c.textContent = d; c.setAttribute('aria-hidden', 'true');
+          grid.append(c);
+        });
+        const first = new Date(y, m - 1, 1).getDay();
+        for (let i = 0; i < first; i++) grid.append(document.createElement('div'));
+        const days = new Date(y, m, 0).getDate();
+        for (let d = 1; d <= days; d++) {
+          const date = ymd(y, m, d);
+          const st = nights[date];
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = d;
+          b.className = 'day ' + (st || 'out');
+          if (st === 'free') {
+            b.setAttribute('aria-label', `${longDate(date)}: available, request this night`);
+            b.addEventListener('click', () => openAsk(date));
+          } else {
+            b.disabled = true;
+            b.setAttribute('aria-label', `${longDate(date)}: ${STATUS_WORD[st] || 'not bookable'}`);
+          }
+          grid.append(b);
+        }
+        sec.append(h, grid);
+        box.append(sec);
+        if (++m > 12) { m = 1; y++; }
+      }
+    }
+
+    // ---- request dialog ----
+    function openAsk(date) {
+      picked = date;
+      $('ask-date').textContent = longDate(date);
+      $('ask-msg').textContent = '';
+      $('ask-form').hidden = false;
+      $('ask-done').hidden = true;
+      $('f-name').value = store.get('dinner_name') || $('f-name').value;
+      $('f-email').value = store.get('dinner_email') || $('f-email').value;
+      $('ask').showModal();
+    }
+
+    $('ask-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = new FormData(e.target);
+      const body = {
+        action: 'request', date: picked,
+        name: f.get('name').trim(), email: f.get('email').trim(), kind: f.get('kind'), note: f.get('note').trim(),
+      };
+      $('ask-send').disabled = true;
+      $('ask-msg').textContent = 'Sending…';
+      const r = await call(body);
+      $('ask-send').disabled = false;
+      if (!r.ok) {
+        $('ask-msg').textContent = errText(r.error);
+        if (r.error === 'bad_password') { $('ask').close(); showLogin(errText('bad_password')); }
+        if (r.error === 'not_free' || r.error === 'already_requested') load();
+        return;
+      }
+      store.set('dinner_name', body.name, true);
+      store.set('dinner_email', body.email, true);
+      nights[picked] = 'requested';
+      render();
+      $('f-note').value = '';
+      $('done-date').textContent = longDate(picked);
+      $('ask-form').hidden = true;
+      $('ask-done').hidden = false;
+    });
+    $('ask-cancel').addEventListener('click', () => $('ask').close());
+    $('done-close').addEventListener('click', () => $('ask').close());
+
+    // ---- login ----
+    $('login').addEventListener('submit', (e) => {
+      e.preventDefault();
+      password = $('pw').value.trim();
+      store.set(PW_KEY, password, $('remember').checked);
+      $('login-msg').textContent = '';
+      load();
+    });
+    $('logout').addEventListener('click', () => showLogin());
+
+    // ---- demo data (?demo) ----
+    function demoCall(body) {
+      return new Promise((resolve) => setTimeout(() => {
+        if (body.password !== 'demo') return resolve({ ok: false, error: 'bad_password' });
+        if (body.action === 'request') return resolve({ ok: true });
+        const out = [];
+        const t = new Date();
+        for (let i = 1; i <= 90; i++) {
+          const d = new Date(t.getFullYear(), t.getMonth(), t.getDate() + i);
+          const r = (d.getDate() * 7 + d.getMonth() * 3) % 10;
+          out.push({ date: ymd(d.getFullYear(), d.getMonth() + 1, d.getDate()), status: r < 6 ? 'free' : r < 9 ? 'busy' : 'requested' });
+        }
+        resolve({ ok: true, nights: out });
+      }, 300));
+    }
+
+    // ---- start ----
+    if (DEMO) $('demo-note').hidden = false;
+    if (!ENDPOINT && !DEMO) {
+      $('setup-note').hidden = false;
+    } else if (password) {
+      load();
+    } else {
+      showLogin();
+    }
+  </script>
+</body>
+
+</html>

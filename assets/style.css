@@ -140,3 +140,71 @@ th, td { border: 1px solid var(--rule); padding: .3rem .6rem; }
   a { text-decoration: none; }
 }
 .intro > div, .post-list a, .entry > * { min-width: 0; }
+
+/* ---------- dinner booking (/dinner/) ---------- */
+:root {
+  --free-bg: #d7e7f6; --free-fg: #164a75; --free-line: #7fadd6;
+  --busy-bg: #f6d9d7; --busy-fg: #8a2622; --busy-line: #dc9a95;
+  --req-bg: #f6e8c6; --req-fg: #6e5212; --req-line: #d9bb6b;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --free-bg: #1c3550; --free-fg: #b3d6f5; --free-line: #3f6f9c;
+    --busy-bg: #4a2321; --busy-fg: #f2b8b3; --busy-line: #7f3d39;
+    --req-bg: #40351a; --req-fg: #ecd291; --req-line: #7a6427;
+  }
+}
+:root[data-theme="dark"] {
+  --free-bg: #1c3550; --free-fg: #b3d6f5; --free-line: #3f6f9c;
+  --busy-bg: #4a2321; --busy-fg: #f2b8b3; --busy-line: #7f3d39;
+  --req-bg: #40351a; --req-fg: #ecd291; --req-line: #7a6427;
+}
+.dinner input:not([type=checkbox]):not([type=radio]), .dinner-dialog input:not([type=radio]), .dinner-dialog textarea {
+  width: 100%; font: inherit; color: var(--text); background: var(--bg);
+  border: 1px solid var(--rule); border-radius: 6px; padding: .5rem .6rem;
+}
+.dinner button, .dinner-dialog button {
+  font: 600 1rem var(--sans); padding: .55rem 1.1rem; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--accent); background: var(--accent); color: var(--bg);
+}
+.dinner-dialog button.secondary { background: transparent; color: var(--text); border-color: var(--rule); }
+.dinner button:disabled, .dinner-dialog button:disabled { opacity: .6; cursor: default; }
+.dinner button.linklike { background: none; border: 0; padding: 0; color: var(--muted); font: inherit; text-decoration: underline; }
+.dinner-banner { background: var(--surface); border-radius: 8px; padding: .6rem .9rem; }
+.dinner-login { max-width: 24rem; margin-top: 1.5rem; }
+.dinner-login > label:first-child { display: block; font-weight: 600; margin-bottom: .3rem; }
+.dinner-login-row { display: flex; gap: .5rem; }
+.dinner-login-row button { flex: none; }
+.dinner-check { display: block; color: var(--muted); font-size: .95rem; margin-top: .5rem; }
+.dinner-msg { color: var(--busy-fg); margin: .5rem 0 0; }
+.dinner-msg:empty { display: none; }
+.dinner-legend { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; list-style: none; padding: 0; margin: 1.5rem 0 .25rem; font-size: .95rem; }
+.swatch { display: inline-block; width: 1rem; height: 1rem; border-radius: 4px; vertical-align: -2px; margin-right: .4rem; border: 1px solid; }
+.swatch.free { background: var(--free-bg); border-color: var(--free-line); }
+.swatch.busy { background: var(--busy-bg); border-color: var(--busy-line); }
+.swatch.requested { background: var(--req-bg); border-color: var(--req-line); }
+.dinner-hint { font-size: .9rem; margin: .25rem 0; }
+.dinner-month h2 { font-size: 1.2rem; }
+.dinner-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.dinner-grid .dow { text-align: center; font-size: .8rem; color: var(--muted); padding-bottom: .2rem; }
+.dinner .day {
+  aspect-ratio: 1 / 1; min-height: 2.5rem; padding: 0; border-radius: 6px; font: 600 .95rem var(--sans);
+  font-variant-numeric: tabular-nums; border: 1px solid transparent;
+}
+.dinner .day.free { background: var(--free-bg); color: var(--free-fg); border-color: var(--free-line); }
+.dinner .day.free:hover { box-shadow: inset 0 0 0 1px var(--free-line); }
+.dinner .day.free:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dinner .day.busy:disabled { background: var(--busy-bg); color: var(--busy-fg); border-color: var(--busy-line); text-decoration: line-through; opacity: 1; }
+.dinner .day.requested:disabled { background: var(--req-bg); color: var(--req-fg); border-color: var(--req-line); opacity: 1; }
+.dinner .day.out:disabled { background: transparent; border-color: transparent; color: var(--muted); font-weight: 400; opacity: .5; }
+.dinner-dialog {
+  width: min(30rem, calc(100vw - 32px)); border: 1px solid var(--rule); border-radius: 10px;
+  background: var(--bg); color: var(--text); padding: 1.25rem;
+}
+.dinner-dialog::backdrop { background: rgb(0 0 0 / .45); }
+.dinner-dialog h2 { margin-top: 0; font-size: 1.25rem; }
+.dinner-dialog label { display: block; font-weight: 600; margin: .8rem 0 .25rem; }
+.dinner-dialog fieldset { border: 0; padding: 0; margin: .8rem 0 0; }
+.dinner-dialog legend { font-weight: 600; padding: 0; }
+.dinner-dialog .dinner-choice { font-weight: 400; margin: .3rem 0; }
+.dinner-actions { display: flex; justify-content: flex-end; gap: .5rem; margin-top: 1rem; }
