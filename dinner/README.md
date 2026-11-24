@@ -31,6 +31,15 @@ The page is `noindex` and isn't linked from the rest of the site.
    In the editor's left sidebar, click **+** next to **Services**, choose **Google Calendar API**,
    leave the identifier as `Calendar`, and click **Add**. (This turns the API on in the script's
    hidden Google Cloud project; you can't do that from the Cloud console.)
+   If the **+** does nothing (an ad-blocker can stop its dialog opening): in Project Settings tick
+   **Show "appsscript.json" manifest file in editor**, open `appsscript.json`, add this, save and reload:
+   ```json
+   "dependencies": {
+     "enabledAdvancedServices": [
+       { "userSymbol": "Calendar", "serviceId": "calendar", "version": "v3" }
+     ]
+   },
+   ```
 3. Click the gear (**Project Settings**):
    - Check that the time zone is "(GMT-05:00) Eastern Time - New York".
    - Under **Script properties**, add:
