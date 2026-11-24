@@ -150,20 +150,14 @@ function busyIntervals_(firstDate, lastDate) {
   for (let from = firstDate; from <= lastDate; from = addDays_(from, 30)) {
     let to = addDays_(from, 30);
     if (to > addDays_(lastDate, 1)) to = addDays_(lastDate, 1);
-    const res = UrlFetchApp.fetch('https://www.googleapis.com/calendar/v3/freeBusy', {
-      method: 'post',
-      contentType: 'application/json',
-      headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
-      payload: JSON.stringify({
-        timeMin: at_(from, 0).toISOString(),
-        timeMax: at_(to, 0).toISOString(),
-        timeZone: CONFIG.TIME_ZONE,
-        items: items,
-      }),
-      muteHttpExceptions: true,
+    // `Calendar` is the "Google Calendar API" advanced service (editor sidebar: Services +).
+    const res = Calendar.Freebusy.query({
+      timeMin: at_(from, 0).toISOString(),
+      timeMax: at_(to, 0).toISOString(),
+      timeZone: CONFIG.TIME_ZONE,
+      items: items,
     });
-    if (res.getResponseCode() !== 200) throw new Error('freeBusy ' + res.getResponseCode() + ': ' + res.getContentText());
-    const cals = JSON.parse(res.getContentText()).calendars || {};
+    const cals = res.calendars || {};
     Object.keys(cals).forEach(function (id) {
       if (cals[id].errors) console.warn('Calendar ' + id + ' not readable: ' + JSON.stringify(cals[id].errors));
       (cals[id].busy || []).forEach(function (b) {

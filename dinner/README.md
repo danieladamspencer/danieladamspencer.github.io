@@ -28,6 +28,9 @@ The page is `noindex` and isn't linked from the rest of the site.
    rename it "Dinner booking".
 2. Replace everything in `Code.gs` with the contents of `dinner/apps-script/Code.gs`.
    Save (Ctrl+S).
+   In the editor's left sidebar, click **+** next to **Services**, choose **Google Calendar API**,
+   leave the identifier as `Calendar`, and click **Add**. (This turns the API on in the script's
+   hidden Google Cloud project; you can't do that from the Cloud console.)
 3. Click the gear (**Project Settings**):
    - Check that the time zone is "(GMT-05:00) Eastern Time - New York".
    - Under **Script properties**, add:
